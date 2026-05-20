@@ -5,7 +5,7 @@ cd "$(dirname "$0")/.."
 
 required_files=(
   "README.md"
-  "README.zh.md"
+  "README.en.md"
   "AGENTS.md"
   "CLAUDE.md"
   "CURSOR.md"
@@ -56,7 +56,7 @@ required_zh_terms=(
 )
 
 for term in "${required_zh_terms[@]}"; do
-  if ! grep -qF -- "$term" README.zh.md; then
+  if ! grep -qF -- "$term" README.md; then
     echo "Chinese README is missing core term: $term" >&2
     exit 1
   fi

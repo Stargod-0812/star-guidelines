@@ -2,60 +2,74 @@
 
 # Star Guidelines
 
-**An operating contract for frontier coding agents.**
+**编码 Agent 的工作契约。七条规则，杀死 agent 失控。**
 
-One native adapter per IDE. One seven-rule contract underneath. No drift between environments.
+一个 IDE 一个适配器。底层一份契约。跨环境零漂移。
 
 [![Stars](https://img.shields.io/github/stars/Stargod-0812/star-guidelines?style=flat-square&logo=github&label=stars&color=111)](https://github.com/Stargod-0812/star-guidelines/stargazers)
 [![Last commit](https://img.shields.io/github/last-commit/Stargod-0812/star-guidelines?style=flat-square&color=111)](https://github.com/Stargod-0812/star-guidelines/commits/main)
-[![Adapters](https://img.shields.io/badge/adapters-Cursor%20%7C%20Claude%20%7C%20Codex%20%7C%20WorkBuddy-111?style=flat-square)](#the-adapter-router)
-[![Contract](https://img.shields.io/badge/contract-7%20rules-111?style=flat-square)](#the-star-contract)
+[![Adapters](https://img.shields.io/badge/adapters-Cursor%20%7C%20Claude%20%7C%20Codex%20%7C%20WorkBuddy-111?style=flat-square)](#适配器路由)
+[![Contract](https://img.shields.io/badge/contract-7%20rules-111?style=flat-square)](#star-契约)
 [![Version](https://img.shields.io/badge/version-2.0.0-111?style=flat-square)](./CHANGELOG.md)
-[![Lang](https://img.shields.io/badge/简体中文-111?style=flat-square)](./README.zh.md)
+[![English](https://img.shields.io/badge/English-111?style=flat-square)](./README.en.md)
 
 </div>
 
 ---
 
-> Frontier coding agents do not fail at the model layer. They fail at the operating layer — guessing scope, editing outside the task, ignoring uncommitted work, fabricating completion, and loading the wrong rules per IDE. **Star Guidelines is the contract that closes that gap.**
+## 问题
 
-## Why this exists
+Frontier 编码 agent 几乎不在模型层面翻车。翻车发生在执行层：
 
-Most coding-agent failures look like skill gaps. They are not. They are operating gaps.
-
-- The agent picks an interpretation when the request is ambiguous, instead of asking.
-- The agent edits code outside the requested scope because it looks improvable.
-- The agent invents abstractions before the repository has earned them.
-- The agent overwrites uncommitted user work.
-- The agent says "done" without a test, build, screenshot, or reproduction.
-- The agent loads `.cursor/rules/` in a Claude project, or `CLAUDE.md` in Cursor, and the two surfaces cancel each other out.
-
-Better models do not fix any of this. A contract does.
-
-## How it is different
-
-| Star Guidelines | Most agent rule kits |
+| 失控模式 | 后果 |
 | --- | --- |
-| One adapter per IDE, no overlap | One file, hope every IDE reads it |
-| Seven rules, single normative source in `core/CONTRACT.md` | Long checklists that drift across files |
-| Verifiable handshake (`is star-guidelines active?`) | No way to confirm the rules loaded |
-| Curated by one person, on purpose | Committee-edited, lowest-common-denominator |
-| Refusal to ship without evidence is a feature | "It looks right" passes for completion |
+| 请求模糊时自作主张 | 做错方向，回滚成本翻倍 |
+| 顺手改任务边界外的代码 | review 成本暴涨，隐性 bug |
+| 还没有真实重复就堆抽象 | 代码膨胀，后人维护负担 |
+| 覆盖用户未提交的工作 | 丢改动，信任归零 |
+| 没跑任何验证就说 "Done" | 虚假安全感，线上炸 |
+| 在 Cursor 里加载了 Claude 的规则，反之亦然 | 规则互相抵消，等于没有规则 |
 
-## Who it is for
-
-Engineers who use coding agents on real codebases and have already been burned by unsolicited edits, fabricated completion, abstractions for one use case, and rules that quietly stopped applying. If you have never paid for one of those mistakes, you do not need this yet.
-
-This is a personal kit, curated aggressively. It is not a starter template.
+**更强的模型不修这些。一份执行契约才修。**
 
 ---
 
-## The adapter router
+## Star 契约
+
+七条规则。规范源：[`core/CONTRACT.md`](./core/CONTRACT.md)。
+
+| # | 规则 | 一句话 |
+| --- | --- | --- |
+| 1 | **先澄清，再编辑** | 歧义会改文件/API/数据/安全/用户行为时，先问 |
+| 2 | **先阅读，再设计** | 选方案前读完相关代码、测试、文档、本地约定 |
+| 3 | **保持改动狭窄** | 只碰请求需要的文件；不顺手重构 |
+| 4 | **优先当前最简方案** | 没有真实重复需求，不堆抽象 |
+| 5 | **保护用户工作** | 未提交改动默认属于用户；没有指令不覆盖 |
+| 6 | **用具体证据验证** | 跑最小有用的测试/构建/截图/日志/复现 |
+| 7 | **简短说明权衡** | 点出风险和替代方案，不把日常工作变仪式 |
+
+契约强度随风险上升。改个拼写保持轻量；跨模块重构必须有计划和证据。
+
+---
+
+## 与其他规则集的区别
+
+| | Star Guidelines | 多数 agent 规则集 |
+| --- | --- | --- |
+| 架构 | 一个 IDE 一个适配器，互不重叠 | 一个文件 hope 所有 IDE 读到 |
+| 规范源 | 七条规则，单文件 `core/CONTRACT.md` | 长 checklist，文件之间漂移 |
+| 验证 | 可执行握手确认规则已加载 | 没有确认机制 |
+| 策展 | 一个人精修，刻意为之 | 委员会编辑，最低公约数 |
+| 完成标准 | 没证据不算完成 | "看起来对" 就过 |
+
+---
+
+## 适配器路由
 
 ```text
                     ┌────────────────────────────┐
-                    │     core/CONTRACT.md       │   ← normative source
-                    │       7 Star rules         │
+                    │     core/CONTRACT.md       │   ← 规范源
+                    │       7 条 Star 规则        │
                     └─────────────┬──────────────┘
                                   │
         ┌──────────────┬──────────┴──────────┬──────────────┐
@@ -63,25 +77,26 @@ This is a personal kit, curated aggressively. It is not a starter template.
      Cursor       Claude Code              Codex        WorkBuddy
      ──────       ───────────              ─────        ─────────
    .cursor/rules   CLAUDE.md             AGENTS.md      WORKBUDDY.md
-   .cursor/skills  .claude-plugin/       skills/        (project direction)
+   .cursor/skills  .claude-plugin/       skills/        (项目方向)
 ```
 
-One environment, one primary adapter. Use the table below as the source of truth for which file gets loaded where.
+一个环境只装一个主适配器。下表是每个 IDE 的入口真相：
 
-| Running in | Primary adapter | Optional companion | Agent should say |
+| 运行环境 | 主适配器 | 可选搭配 | Agent 应答 |
 | --- | --- | --- | --- |
-| Cursor project rules | `.cursor/rules/star-guidelines.mdc` | `.cursor/skills/star-guidelines/SKILL.md` | `Cursor rule loaded` |
-| Cursor project skill | `.cursor/skills/star-guidelines/SKILL.md` | `.cursor/rules/star-guidelines.mdc` | `Cursor skill loaded` |
-| Codex / AGENTS-aware IDE | `AGENTS.md` | `skills/star-guidelines/SKILL.md` | `AGENTS rules loaded` |
-| Codex-style skill runner | `skills/star-guidelines/SKILL.md` | `skills/star-guidelines/agents/openai.yaml` | `skill loaded` |
-| Claude Code project | `CLAUDE.md` | none | `Claude project rules loaded` |
-| Claude plugin-style setup | `.claude-plugin/` | none | `bundled skill loaded` |
-| WorkBuddy long task | `WORKBUDDY.md` | project task context | `WorkBuddy direction loaded` |
-| New adapter work | `core/CONTRACT.md` | existing adapter examples | `contract source loaded` |
+| Cursor 项目规则 | `.cursor/rules/star-guidelines.mdc` | `.cursor/skills/star-guidelines/SKILL.md` | `Cursor rule loaded` |
+| Cursor 项目 skill | `.cursor/skills/star-guidelines/SKILL.md` | `.cursor/rules/star-guidelines.mdc` | `Cursor skill loaded` |
+| Codex / AGENTS IDE | `AGENTS.md` | `skills/star-guidelines/SKILL.md` | `AGENTS rules loaded` |
+| Codex skill runner | `skills/star-guidelines/SKILL.md` | `skills/star-guidelines/agents/openai.yaml` | `skill loaded` |
+| Claude Code 项目 | `CLAUDE.md` | 无 | `Claude project rules loaded` |
+| Claude plugin 环境 | `.claude-plugin/` | 无 | `bundled skill loaded` |
+| WorkBuddy 长任务 | `WORKBUDDY.md` | 项目任务上下文 | `WorkBuddy direction loaded` |
 
-Do not install every adapter into one project. Each file is written for a specific loader. If your project already has rules, merge the matching adapter into the existing rule surface — do not stack them.
+不要把所有适配器堆进同一个项目。如果目标项目已有规则文件，把对应适配器**合并**进去。
 
-## Quick install
+---
+
+## 快速安装
 
 ### Cursor
 
@@ -92,10 +107,9 @@ curl -fsSL "$STAR_RAW/.cursor/rules/star-guidelines.mdc" \
   -o .cursor/rules/star-guidelines.mdc
 ```
 
-For a fuller Cursor project skill alongside the always-on rule:
+完整 skill（可选）：
 
 ```bash
-STAR_RAW=https://raw.githubusercontent.com/Stargod-0812/star-guidelines/main
 mkdir -p .cursor/skills/star-guidelines
 curl -fsSL "$STAR_RAW/.cursor/skills/star-guidelines/SKILL.md" \
   -o .cursor/skills/star-guidelines/SKILL.md
@@ -105,29 +119,26 @@ curl -fsSL "$STAR_RAW/.cursor/skills/star-guidelines/SKILL.md" \
 
 ```bash
 STAR_RAW=https://raw.githubusercontent.com/Stargod-0812/star-guidelines/main
-curl -fsSL "$STAR_RAW/CLAUDE.md" \
-  -o CLAUDE.star-guidelines.md
+curl -fsSL "$STAR_RAW/CLAUDE.md" -o CLAUDE.star-guidelines.md
 ```
 
-Merge `CLAUDE.star-guidelines.md` into the project's `CLAUDE.md`. For plugin-style setups, bundle the package instead:
+合并进项目 `CLAUDE.md`。Plugin 环境用 plugin 包：
 
 ```bash
 git clone https://github.com/Stargod-0812/star-guidelines.git
-cp -R star-guidelines/.claude-plugin /path/to/your/claude-plugin-location/star-guidelines
+cp -R star-guidelines/.claude-plugin /path/to/target/star-guidelines
 ```
 
 ### Codex
 
 ```bash
 STAR_RAW=https://raw.githubusercontent.com/Stargod-0812/star-guidelines/main
-curl -fsSL "$STAR_RAW/AGENTS.md" \
-  -o AGENTS.star-guidelines.md
+curl -fsSL "$STAR_RAW/AGENTS.md" -o AGENTS.star-guidelines.md
 ```
 
-Merge into the existing `AGENTS.md`. For the reusable skill:
+合并进 `AGENTS.md`。可复用 skill：
 
 ```bash
-git clone https://github.com/Stargod-0812/star-guidelines.git
 mkdir -p ~/.codex/skills
 cp -R star-guidelines/skills/star-guidelines ~/.codex/skills/
 ```
@@ -136,64 +147,53 @@ cp -R star-guidelines/skills/star-guidelines ~/.codex/skills/
 
 ```bash
 STAR_RAW=https://raw.githubusercontent.com/Stargod-0812/star-guidelines/main
-curl -fsSL "$STAR_RAW/WORKBUDDY.md" \
-  -o WORKBUDDY.star-guidelines.md
+curl -fsSL "$STAR_RAW/WORKBUDDY.md" -o WORKBUDDY.star-guidelines.md
 ```
 
-Merge into your WorkBuddy project-level direction area. Use it for long-running work, memory-aware flows, MCP-heavy tasks, and cross-session handoffs.
+合并进 WorkBuddy 项目级 direction 区域。
 
-## Agent handshake
+---
 
-After installation, ask:
+## 验证握手
+
+安装后问 agent：
 
 ```text
 is star-guidelines active?
 ```
 
-| IDE | Expected answer mentions |
+| IDE | 预期回答应提到 |
 | --- | --- |
-| Cursor | Cursor rules or Cursor skill |
-| Codex | `AGENTS.md` or `$star-guidelines` |
-| Claude Code | the seven-rule operating contract |
-| WorkBuddy | project boundary, memory/context check, consent, evidence, durable handoff |
+| Cursor | Cursor rules 或 Cursor skill |
+| Codex | `AGENTS.md` 或 `$star-guidelines` |
+| Claude Code | 七条工作契约 |
+| WorkBuddy | 项目边界、记忆检查、consent、证据、可交接状态 |
 
-If the answer names the wrong adapter, remove the extra rule surface and keep only the adapter for the running IDE.
+回答里出现错误适配器 → 删掉多余规则文件，只保留当前 IDE 的那一个。
 
 ---
 
-## The Star Contract
-
-The seven rules every adapter carries. Source of truth: [`core/CONTRACT.md`](./core/CONTRACT.md). The other adapter files are projections of this file into each IDE's native loader.
-
-1. **Clarify before editing.** State assumptions that affect implementation. Ask when ambiguity changes files, APIs, data, safety, or user-visible behavior.
-2. **Read before designing.** Inspect existing code, tests, scripts, docs, and local conventions before choosing an implementation.
-3. **Keep the change narrow.** Touch only files needed for the request. No unsolicited refactors. No broad formatting changes.
-4. **Prefer the current simple solution.** Add abstraction only when the repository already has real repeated use, or an established pattern requires it.
-5. **Preserve user work.** Treat uncommitted changes as user-owned unless you made them. Never overwrite or revert without explicit instruction.
-6. **Verify with concrete evidence.** Run the smallest useful test, build, lint, screenshot, log check, or manual reproduction. Report what passed and what could not be run.
-7. **Explain tradeoffs briefly.** Name meaningful risks, simpler alternatives, and unresolved questions. Do not turn routine work into ceremony.
-
-The contract scales with risk. A one-line typo fix stays light. A cross-module refactor earns a plan and evidence.
-
-## What good looks like
+## 好的执行长什么样
 
 ```text
-Orient   →   read the owning files, tests, scripts, docs, and local conventions
-Scope    →   state only the assumptions that can change the implementation
-Edit     →   touch the smallest set of files that satisfy the request
-Verify   →   run the smallest useful check and report exact evidence
-Report   →   say what changed, what passed, what was skipped, what risk remains
+Orient   →   读负责该行为的文件、测试、脚本、文档
+Scope    →   只说明会改变实现的假设
+Edit     →   触碰满足请求的最小文件集
+Verify   →   跑最小有用检查，报告具体证据
+Report   →   改了什么、通过了什么、跳过了什么、还剩什么风险
 ```
 
-Five steps. No ceremony. Each step has a verification check attached.
+五步。没有仪式。每步都有验证锚点。
 
-## Before and after
+---
 
-Two scenes from [`EXAMPLES.md`](./EXAMPLES.md). Many more there.
+## 对比示例
 
-**Bug fix — missing due date crashes reminders.**
+两个场景节选自 [`EXAMPLES.md`](./EXAMPLES.md)。
 
-A weak agent turns one null path into notification policy, trial handling, and fallback scheduling. A Star agent keeps the behavior change to the crash boundary:
+**Bug 修复 —— 缺失到期日让提醒崩溃**
+
+弱 agent 把一个空值路径扩成通知策略 + 试用处理 + 兜底排期。Star agent 只改崩溃边界：
 
 ```diff
 - reminder_at = customer["due_date"] - timedelta(days=3)
@@ -203,53 +203,66 @@ A weak agent turns one null path into notification policy, trial handling, and f
 + reminder_at = due_date - timedelta(days=3)
 ```
 
-**Completion report — feature done.**
+**完成报告**
 
-A weak agent says "Done."
+弱 agent：「Done.」
 
-A Star agent says: "Changed `src/webhooks/retry.ts` and `src/webhooks/retry.test.ts`. Verified with `npm test -- webhooks/retry.test.ts`. I did not run the full suite. Remaining risk: provider-specific retry throttling was not covered."
+Star agent：「改了 `src/webhooks/retry.ts` 和 `src/webhooks/retry.test.ts`。用 `npm test -- webhooks/retry.test.ts` 验证。完整套件没跑。剩余风险：未覆盖 provider-specific retry throttling。」
 
-The user can see the changed surface, the evidence, and the untested edge. That is the bar.
+用户能精确看到改动面、验证证据和未覆盖边界。
 
 ---
 
-## Repository map
+## 仓库结构
 
 ```text
 star-guidelines/
-├── core/
-│   └── CONTRACT.md                            # normative source (the 7 rules)
-├── AGENTS.md                                  # Codex / AGENTS-aware IDEs
-├── CLAUDE.md                                  # Claude Code project rules
-├── CURSOR.md                                  # Cursor usage guide
-├── WORKBUDDY.md                               # long-running agent direction
+├── core/CONTRACT.md                   # 规范源（七条规则）
+├── AGENTS.md                          # Codex / AGENTS IDE
+├── CLAUDE.md                          # Claude Code 项目规则
+├── CURSOR.md                          # Cursor 使用指南
+├── WORKBUDDY.md                       # 长流程 agent direction
 ├── .cursor/
-│   ├── rules/star-guidelines.mdc              # Cursor always-on rule
-│   └── skills/star-guidelines/SKILL.md        # Cursor project skill
+│   ├── rules/star-guidelines.mdc      # Cursor 常驻规则
+│   └── skills/star-guidelines/SKILL.md
 ├── skills/star-guidelines/
-│   ├── SKILL.md                               # reusable Markdown skill
-│   └── agents/openai.yaml                     # skill-aware runner metadata
-├── .claude-plugin/                            # Claude plugin-style package
+│   ├── SKILL.md                       # 可复用 Markdown skill
+│   └── agents/openai.yaml             # skill runner 元数据
+├── .claude-plugin/                    # Claude plugin 包
 ├── docs/
-│   ├── ADAPTERS.md                            # adapter guide
-│   └── INSTALL.md                             # short install guide
-├── EXAMPLES.md                                # good and bad agent behavior
-├── CHANGELOG.md                               # versioned changes
-└── scripts/check-repo.sh                      # consistency + history checks
+│   ├── ADAPTERS.md                    # 适配器指南
+│   └── INSTALL.md                     # 安装指南
+├── EXAMPLES.md                        # 好坏行为对照
+├── CHANGELOG.md                       # 版本变更
+└── scripts/check-repo.sh             # 一致性检查
 ```
 
-## Design principles
+---
 
-- **One loader, one adapter.** No IDE should need to guess which file matters.
-- **Local code beats generic advice.** The agent must read the repository before shaping a change.
-- **Small diffs are a feature.** Unrelated cleanup belongs in a follow-up, not in a hidden side quest.
-- **Verification is part of the work.** A completion report without evidence is not complete.
-- **User work is sacred.** Existing uncommitted changes are not disposable context.
-- **The contract is normative.** When an adapter and `core/CONTRACT.md` disagree, the contract wins.
+## 设计原则
 
-## Maintenance
+- **一个 loader 一个适配器。** 不让 IDE 猜哪个文件重要。
+- **本地代码优先。** agent 必须先读仓库再动手。
+- **小 diff 是产品能力。** 无关清理是后续任务，不是隐藏副作用。
+- **验证属于工作本身。** 没证据的完成报告不算完成。
+- **用户工作不可处置。** 未提交改动不是可以随便覆盖的上下文。
+- **契约即规范。** 适配器与 `core/CONTRACT.md` 不一致时以契约为准。
 
-When changing the contract, update every adapter in the same change:
+---
+
+## 适合谁用
+
+在真实代码库里用编码 agent、且已经被越界改动 / 伪造完成 / 堆无用抽象 / 规则悄悄失效坑过的工程师。
+
+如果你还没为这些错误买过单，暂时不需要这套。
+
+这是个人 kit，激进精修。不是入门模板。
+
+---
+
+## 维护
+
+修改核心契约时，同一次 commit 同步所有适配器：
 
 - `core/CONTRACT.md`
 - `AGENTS.md`
@@ -260,22 +273,22 @@ When changing the contract, update every adapter in the same change:
 - `skills/star-guidelines/SKILL.md`
 - `.claude-plugin/skills/star-guidelines/SKILL.md`
 
-Before publishing, run:
+发布前运行：
 
 ```bash
 scripts/check-repo.sh
 ```
 
-The script enforces file presence, contract-term coverage in every adapter, `origin/main` alignment, and `Stargod-0812` authorship across reachable refs. See [CHANGELOG.md](./CHANGELOG.md) for version history.
+---
 
-## License
+## 授权
 
-Star Guidelines is **source-available, permission-required**. You are free to read the kit and reference it in your own work with attribution. Redistributing it, bundling it into a product, building a competing rule kit on top of it, or training a model against it requires written permission from the author. See [`LICENSE`](./LICENSE).
+**源码可读，需经授权。** 欢迎阅读和引用（署名 + 链接）。分发、打包进产品、构建对位规则集、用于模型训练，需作者书面授权。详见 [`LICENSE`](./LICENSE)。
 
 ---
 
 <div align="center">
 
-Built and curated by **[Star](https://github.com/Stargod-0812)** · v2.0.0 · Personal kit, used in production
+由 **[Star](https://github.com/Stargod-0812)** 构建并精修 · v2.0.0 · 个人 kit，已用于生产
 
 </div>

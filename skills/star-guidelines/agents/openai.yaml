@@ -1,0 +1,4 @@
+interface:
+  display_name: "Star Guidelines"
+  short_description: "Small diffs, simple code, verified completion"
+  default_prompt: "Use $star-guidelines to make this coding task scope-first and evidence-verified."

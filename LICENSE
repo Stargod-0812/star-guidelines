@@ -1,0 +1,45 @@
+Star Guidelines License
+Source-Available, Permission-Required
+
+Copyright (c) 2026 Stargod-0812. All rights reserved.
+
+This repository and its contents (the "Work") are made publicly readable
+so engineers can study, evaluate, and reference the contract.
+
+You may, without prior permission:
+
+  1. Read the Work in this repository.
+  2. Quote short excerpts in personal notes, internal documents, blog
+     posts, or academic writing, provided you attribute Stargod-0812 and
+     link to https://github.com/Stargod-0812/star-guidelines.
+
+You must obtain prior written permission from Stargod-0812 to:
+
+  1. Copy, mirror, fork-as-product, or redistribute the Work in whole or
+     in substantial part.
+  2. Bundle the Work, or any adaptation of it, into a product, service,
+     tool, plugin, marketplace listing, course, or paid offering.
+  3. Use the Work, or any adaptation of it, as the basis of a publicly
+     distributed rule kit, contract, or agent operating layer.
+  4. Train a machine-learning model on the Work where the trained model
+     or its outputs are intended to substitute for the Work.
+  5. Use the names "Star Guidelines" or "Star Contract" to identify
+     another work, product, or service.
+
+Permission requests: open a GitHub issue at
+https://github.com/Stargod-0812/star-guidelines/issues with the
+"proposal" label, or reach the author through the channels listed on
+https://github.com/Stargod-0812.
+
+Any permission, when granted, is non-transferable and limited to the
+scope stated in the grant. Permission granted to one party does not
+extend to others. The author may decline new requests at any time;
+permissions already granted and used in good faith are not retroactively
+revoked.
+
+THE WORK IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE, AND NONINFRINGEMENT. IN NO EVENT SHALL
+THE AUTHOR BE LIABLE FOR ANY CLAIM, DAMAGES, OR OTHER LIABILITY ARISING
+FROM, OUT OF, OR IN CONNECTION WITH THE WORK OR THE USE OR OTHER
+DEALINGS IN THE WORK.

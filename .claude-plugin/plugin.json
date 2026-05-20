@@ -1,0 +1,22 @@
+{
+  "name": "star-guidelines",
+  "description": "Scope-first, simple-diff, evidence-verified coding-agent guidelines for Claude Code and compatible agents.",
+  "version": "2.0.0",
+  "author": {
+    "name": "Stargod-0812",
+    "url": "https://github.com/Stargod-0812"
+  },
+  "homepage": "https://github.com/Stargod-0812/star-guidelines",
+  "repository": "https://github.com/Stargod-0812/star-guidelines",
+  "keywords": [
+    "guidelines",
+    "coding-agents",
+    "codex",
+    "claude-code",
+    "cursor",
+    "workbuddy"
+  ],
+  "skills": [
+    "./skills/star-guidelines"
+  ]
+}

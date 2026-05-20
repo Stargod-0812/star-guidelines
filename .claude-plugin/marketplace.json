@@ -1,0 +1,37 @@
+{
+  "name": "star-guidelines",
+  "id": "star-guidelines",
+  "owner": {
+    "name": "Stargod-0812",
+    "url": "https://github.com/Stargod-0812"
+  },
+  "metadata": {
+    "description": "Scope-first, simple-diff, evidence-verified coding-agent guidelines.",
+    "version": "2.0.0",
+    "homepage": "https://github.com/Stargod-0812/star-guidelines",
+    "repository": "https://github.com/Stargod-0812/star-guidelines"
+  },
+  "plugins": [
+    {
+      "name": "star-guidelines",
+      "source": "./",
+      "description": "Agent operating guidelines for small diffs, simple implementations, user-work preservation, and verified completion.",
+      "version": "2.0.0",
+      "author": {
+        "name": "Stargod-0812",
+        "url": "https://github.com/Stargod-0812"
+      },
+      "homepage": "https://github.com/Stargod-0812/star-guidelines",
+      "repository": "https://github.com/Stargod-0812/star-guidelines",
+      "keywords": [
+        "guidelines",
+        "coding-agents",
+        "codex",
+        "claude-code",
+        "cursor",
+        "workbuddy"
+      ],
+      "category": "workflow"
+    }
+  ]
+}

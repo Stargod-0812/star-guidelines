@@ -11,7 +11,7 @@
 [![Adapters](https://img.shields.io/badge/adapters-Cursor%20%7C%20Claude%20%7C%20Codex%20%7C%20WorkBuddy-111?style=flat-square)](#适配器架构)
 [![Contract](https://img.shields.io/badge/contract-7%20rules-111?style=flat-square)](#star-契约)
 [![Version](https://img.shields.io/badge/v2.0.0-111?style=flat-square)](./CHANGELOG.md)
-[![English](https://img.shields.io/badge/English-111?style=flat-square)](./README.en.md)
+[![English](https://img.shields.io/badge/English-111?style=flat-square)](./README.md)
 
 </div>
 
@@ -97,13 +97,13 @@ Star Guidelines 的核心设计决策：**每个 IDE 用自己的原生格式加
 
 | 运行环境 | 主适配器 | 可选搭配 | 握手应答 |
 | --- | --- | --- | --- |
-| Cursor 项目规则 | `.cursor/rules/star-guidelines.mdc` | `.cursor/skills/…/SKILL.md` | `Cursor rule loaded` |
-| Cursor 项目 skill | `.cursor/skills/star-guidelines/SKILL.md` | `.cursor/rules/…` | `Cursor skill loaded` |
-| Codex / AGENTS IDE | `AGENTS.md` | `skills/star-guidelines/SKILL.md` | `AGENTS rules loaded` |
-| Codex skill runner | `skills/star-guidelines/SKILL.md` | `agents/openai.yaml` | `skill loaded` |
-| Claude Code 项目 | `CLAUDE.md` | — | `Claude project rules loaded` |
-| Claude plugin 环境 | `.claude-plugin/` | — | `bundled skill loaded` |
-| WorkBuddy 长任务 | `WORKBUDDY.md` | project task context | `WorkBuddy direction loaded` |
+| Cursor 项目规则 | `.cursor/rules/star-guidelines.mdc` | `.cursor/skills/…/SKILL.md` | `star-guidelines active: scope-first, simple-diff, evidence-verified agent rules loaded for Cursor.` |
+| Cursor 项目 skill | `.cursor/skills/star-guidelines/SKILL.md` | `.cursor/rules/…` | `star-guidelines active: scope-first, simple-diff, evidence-verified agent skill loaded for Cursor.` |
+| Codex / AGENTS IDE | `AGENTS.md` | `skills/star-guidelines/SKILL.md` | `star-guidelines active: scope-first, simple-diff, evidence-verified agent rules loaded from AGENTS.md.` |
+| Codex skill runner | `skills/star-guidelines/SKILL.md` | `agents/openai.yaml` | `star-guidelines active: scope-first, simple-diff, evidence-verified reusable skill loaded.` |
+| Claude Code 项目 | `CLAUDE.md` | — | `star-guidelines active: scope-first, simple-diff, evidence-verified Claude project rules loaded.` |
+| Claude plugin 环境 | `.claude-plugin/` | — | `star-guidelines active: scope-first, simple-diff, evidence-verified bundled skill loaded.` |
+| WorkBuddy 长任务 | `WORKBUDDY.md` | project task context | `star-guidelines active: scope-first, simple-diff, evidence-verified WorkBuddy direction loaded.` |
 
 > **关键原则**：不要把所有适配器装进同一个项目。每个文件针对特定 loader 设计。已有规则的项目，把对应适配器**合并**进现有规则文件。
 
@@ -113,6 +113,9 @@ Star Guidelines 的核心设计决策：**每个 IDE 用自己的原生格式加
 
 > [!TIP]
 > 每个命令都是幂等的。重复执行会覆盖旧版本，不会产生冲突。
+
+> [!NOTE]
+> 以下安装命令允许用于私有或内部项目。公开再分发、打包进 marketplace，或把复制出的适配器提交到公开项目，都需要书面授权；详见 [`LICENSE`](./LICENSE)。
 
 ### Cursor（推荐：always-on rule）
 
@@ -194,10 +197,10 @@ is star-guidelines active?
 
 | IDE | 正确响应应包含 |
 | --- | --- |
-| Cursor | `Cursor rule loaded` 或 `Cursor skill loaded` |
-| Codex | `AGENTS.md` 或 `$star-guidelines` |
-| Claude Code | 七条工作契约的描述 |
-| WorkBuddy | 项目边界 + 记忆检查 + consent + 证据 + 可交接状态 |
+| Cursor | `rules loaded for Cursor` 或 `skill loaded for Cursor` |
+| Codex | `rules loaded from AGENTS.md` 或 `reusable skill loaded` |
+| Claude Code | `Claude project rules loaded` |
+| WorkBuddy | `WorkBuddy direction loaded` |
 
 **诊断**：如果响应里提到了错误的适配器（比如在 Cursor 里说"Claude project rules"），说明存在规则冲突。删掉不属于当前 IDE 的规则文件即可。
 
@@ -333,6 +336,11 @@ star-guidelines/
 │   ├── plugin.json                    # Claude plugin manifest
 │   ├── marketplace.json               # Marketplace metadata
 │   └── skills/star-guidelines/SKILL.md # Bundled skill copy
+├── .github/
+│   ├── workflows/check-repo.yml       # CI：仓库一致性检查
+│   ├── ISSUE_TEMPLATE/                # Bug / proposal issue 模板
+│   ├── PULL_REQUEST_TEMPLATE.md       # 适配器同步 checklist
+│   └── CODEOWNERS                     # maintainer review 边界
 ├── docs/
 │   ├── ADAPTERS.md                    # 适配器详细指南
 │   └── INSTALL.md                     # 分平台安装文档
@@ -382,10 +390,13 @@ scripts/check-repo.sh
 
 脚本验证项：
 - 所有必需文件存在
-- 五个核心术语在每个适配器中都有覆盖
+- 七个核心术语在每个适配器中都有覆盖
+- 每个适配器和 README 都包含对应握手文案
 - 中文 README 包含所有中文核心术语
-- Git author/committer 身份一致性
-- `origin/main` 与 HEAD 对齐
+- 本地 Markdown 链接可解析
+- Plugin JSON 和 OpenAI skill metadata 可解析
+- GitHub Actions 会在 push 和 pull request 上运行同一检查
+- 可选发布检查：设置 `STAR_GUIDELINES_EXPECTED_IDENTITY` 检查 Git author/committer 身份一致性，设置 `STAR_GUIDELINES_CHECK_REMOTE_MAIN=1` 要求 `origin/main` 与 HEAD 对齐
 
 ---
 

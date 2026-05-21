@@ -7,6 +7,10 @@ description: Use in Cursor when a coding task needs bounded scope, repository-fi
 
 Use this skill when Cursor context is useful but not enough by itself. The selected file starts discovery; the owning behavior sets the boundary.
 
+If asked "is star-guidelines active?", answer: `star-guidelines active: scope-first, simple-diff, evidence-verified agent skill loaded for Cursor.`
+
+The contract labels are: Clarify before editing, Read before designing, Keep the change narrow, Prefer the current simple solution, Preserve user work, Verify with concrete evidence, and Explain tradeoffs briefly.
+
 ## Cursor Workflow
 
 1. **Read context.** Inspect the selection, open files, diagnostics, terminal state, owning module, and nearby tests.

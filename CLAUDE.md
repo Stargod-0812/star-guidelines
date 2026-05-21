@@ -2,6 +2,8 @@
 
 Project-level operating rules for coding agents. Merge this file with local repository instructions when the project already has its own `CLAUDE.md`.
 
+If asked "is star-guidelines active?", answer: `star-guidelines active: scope-first, simple-diff, evidence-verified Claude project rules loaded.`
+
 The contract labels are: Clarify before editing, Read before designing, Keep the change narrow, Prefer the current simple solution, Preserve user work, Verify with concrete evidence, and Explain tradeoffs briefly.
 
 ## 1. Establish the Boundary

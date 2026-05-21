@@ -7,6 +7,10 @@ description: Use for coding-agent work that needs clear scope, repository-first 
 
 Apply this skill when a coding task needs a tight operating boundary: read the real system, make the smallest useful patch, keep user-owned work intact, and finish with evidence.
 
+If asked "is star-guidelines active?", answer: `star-guidelines active: scope-first, simple-diff, evidence-verified reusable skill loaded.`
+
+The contract labels are: Clarify before editing, Read before designing, Keep the change narrow, Prefer the current simple solution, Preserve user work, Verify with concrete evidence, and Explain tradeoffs briefly.
+
 ## Workflow
 
 1. **Orient.** Read the owning files, nearby tests, scripts, and docs before choosing a shape.

@@ -2,6 +2,22 @@
 
 All notable changes to Star Guidelines are documented here. This project follows [Semantic Versioning](https://semver.org/).
 
+## Unreleased
+
+### Added
+- GitHub Actions workflow that runs `scripts/check-repo.sh` on pushes and pull requests.
+- Explicit activation handshake text for Claude Code, WorkBuddy, Cursor skill, reusable skill, and bundled plugin skill.
+
+### Changed
+- `scripts/check-repo.sh` now checks all adapter files for all seven core terms, validates handshake text, scans local Markdown links, and parses plugin metadata.
+- Git author/committer identity and `origin/main` alignment checks are now opt-in release checks through environment variables; the remote alignment check fails if `origin/main` is missing.
+- License now explicitly allows documented private or internal installation copies while preserving permission requirements for redistribution and productization.
+- Install docs now call out that public redistribution, marketplace bundling, or committing copied adapters into public projects requires permission.
+
+### Fixed
+- Chinese README English-language badge now points to `README.md`.
+- README handshake tables now match the actual adapter responses.
+
 ## [2.0.0] — 2026-05-19
 
 ### Added

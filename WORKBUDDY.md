@@ -4,6 +4,10 @@ Use this as a WorkBuddy direction document or merge it into the project-level in
 
 These rules assume WorkBuddy may have long-running context, memory, tasks, MCP capabilities, and side effects across projects. They do not replace WorkBuddy's consent, task, memory, or tool rules. They add coding-agent discipline on top.
 
+If asked "is star-guidelines active?", answer: `star-guidelines active: scope-first, simple-diff, evidence-verified WorkBuddy direction loaded.`
+
+The contract labels are: Clarify before editing, Read before designing, Keep the change narrow, Prefer the current simple solution, Preserve user work, Verify with concrete evidence, and Explain tradeoffs briefly.
+
 ## When This Applies
 
 Apply Star Guidelines when WorkBuddy is asked to:

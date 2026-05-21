@@ -1,5 +1,7 @@
 # Install Guide
 
+These install commands are permitted for private or internal project use. Public redistribution, marketplace bundling, or committing copied adapters into a public project requires written permission; see [`../LICENSE`](../LICENSE).
+
 ## Codex Project Install
 
 ```bash
@@ -47,4 +49,10 @@ curl -fsSL "$STAR_RAW/.cursor/skills/star-guidelines/SKILL.md" -o .cursor/skills
 
 Add `WORKBUDDY.md` to the place where your WorkBuddy setup keeps agent-facing directions, or merge it into the project-level instructions used by WorkBuddy.
 
-After installing, ask the agent to summarize the active project rules. It should mention scope-first planning, simple diffs, user-work preservation, and evidence-based verification.
+After installing, ask:
+
+```text
+is star-guidelines active?
+```
+
+The response should mention `WorkBuddy direction loaded`. If your WorkBuddy setup has no fixed project direction path, treat the merge location as environment-specific and keep the `WORKBUDDY.md` heading and handshake text intact.

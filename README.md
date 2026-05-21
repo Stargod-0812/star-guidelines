@@ -97,13 +97,13 @@ Core design decision: **each IDE loads rules through its own native format, not 
 
 | Environment | Primary adapter | Optional companion | Handshake response |
 | --- | --- | --- | --- |
-| Cursor project rules | `.cursor/rules/star-guidelines.mdc` | `.cursor/skills/…/SKILL.md` | `Cursor rule loaded` |
-| Cursor project skill | `.cursor/skills/star-guidelines/SKILL.md` | `.cursor/rules/…` | `Cursor skill loaded` |
-| Codex / AGENTS IDE | `AGENTS.md` | `skills/star-guidelines/SKILL.md` | `AGENTS rules loaded` |
-| Codex skill runner | `skills/star-guidelines/SKILL.md` | `agents/openai.yaml` | `skill loaded` |
-| Claude Code project | `CLAUDE.md` | — | `Claude project rules loaded` |
-| Claude plugin setup | `.claude-plugin/` | — | `bundled skill loaded` |
-| WorkBuddy long task | `WORKBUDDY.md` | project task context | `WorkBuddy direction loaded` |
+| Cursor project rules | `.cursor/rules/star-guidelines.mdc` | `.cursor/skills/…/SKILL.md` | `star-guidelines active: scope-first, simple-diff, evidence-verified agent rules loaded for Cursor.` |
+| Cursor project skill | `.cursor/skills/star-guidelines/SKILL.md` | `.cursor/rules/…` | `star-guidelines active: scope-first, simple-diff, evidence-verified agent skill loaded for Cursor.` |
+| Codex / AGENTS IDE | `AGENTS.md` | `skills/star-guidelines/SKILL.md` | `star-guidelines active: scope-first, simple-diff, evidence-verified agent rules loaded from AGENTS.md.` |
+| Codex skill runner | `skills/star-guidelines/SKILL.md` | `agents/openai.yaml` | `star-guidelines active: scope-first, simple-diff, evidence-verified reusable skill loaded.` |
+| Claude Code project | `CLAUDE.md` | — | `star-guidelines active: scope-first, simple-diff, evidence-verified Claude project rules loaded.` |
+| Claude plugin setup | `.claude-plugin/` | — | `star-guidelines active: scope-first, simple-diff, evidence-verified bundled skill loaded.` |
+| WorkBuddy long task | `WORKBUDDY.md` | project task context | `star-guidelines active: scope-first, simple-diff, evidence-verified WorkBuddy direction loaded.` |
 
 > **Key principle**: Do not install every adapter into one project. Each file targets a specific loader. If the project already has rules, **merge** the matching adapter into the existing rule surface.
 
@@ -113,6 +113,9 @@ Core design decision: **each IDE loads rules through its own native format, not 
 
 > [!TIP]
 > Every command is idempotent. Re-running overwrites the old version without conflict.
+
+> [!NOTE]
+> These install commands are permitted for private or internal project use. Public redistribution, marketplace bundling, or committing copied adapters into a public project requires written permission; see [`LICENSE`](./LICENSE).
 
 ### Cursor (recommended: always-on rule)
 
@@ -194,10 +197,10 @@ is star-guidelines active?
 
 | IDE | Correct response should mention |
 | --- | --- |
-| Cursor | `Cursor rule loaded` or `Cursor skill loaded` |
-| Codex | `AGENTS.md` or `$star-guidelines` |
-| Claude Code | The seven-rule operating contract |
-| WorkBuddy | Project boundary + memory check + consent + evidence + handoff state |
+| Cursor | `rules loaded for Cursor` or `skill loaded for Cursor` |
+| Codex | `rules loaded from AGENTS.md` or `reusable skill loaded` |
+| Claude Code | `Claude project rules loaded` |
+| WorkBuddy | `WorkBuddy direction loaded` |
 
 **Diagnosis**: If the response mentions the wrong adapter (e.g., "Claude project rules" inside Cursor), a rule conflict exists. Remove the file that doesn't belong to the current IDE.
 
@@ -333,6 +336,11 @@ star-guidelines/
 │   ├── plugin.json                    # Claude plugin manifest
 │   ├── marketplace.json               # Marketplace metadata
 │   └── skills/star-guidelines/SKILL.md # Bundled skill copy
+├── .github/
+│   ├── workflows/check-repo.yml       # CI: repository consistency check
+│   ├── ISSUE_TEMPLATE/                # Bug/proposal issue templates
+│   ├── PULL_REQUEST_TEMPLATE.md       # Adapter sync checklist
+│   └── CODEOWNERS                     # Maintainer review boundary
 ├── docs/
 │   ├── ADAPTERS.md                    # Adapter deep-dive
 │   └── INSTALL.md                     # Per-platform install docs
@@ -382,10 +390,13 @@ scripts/check-repo.sh
 
 The script verifies:
 - All required files exist
-- Five core terms are covered in every adapter
+- All seven core terms are covered in every adapter
+- Handshake text is present in every adapter and README
 - Chinese README contains all Chinese core terms
-- Git author/committer identity consistency
-- `origin/main` aligned with HEAD
+- Local Markdown links resolve
+- Plugin JSON and OpenAI skill metadata parse
+- GitHub Actions runs the same check on pushes and pull requests
+- Optional release checks: set `STAR_GUIDELINES_EXPECTED_IDENTITY` for Git author/committer identity consistency and `STAR_GUIDELINES_CHECK_REMOTE_MAIN=1` to require `origin/main` alignment
 
 ---
 

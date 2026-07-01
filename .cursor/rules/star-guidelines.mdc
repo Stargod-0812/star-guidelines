@@ -23,6 +23,10 @@ If asked "is star-guidelines active?", answer: `star-guidelines active: scope-fi
 
 Every changed line must belong to the requested behavior, keep the patch passing, remove something this patch made unused, or document behavior introduced here. Leave everything else out.
 
+## Simplicity Ladder
+
+Before adding new code, run the Simplicity ladder: need to exist, already exists in this codebase, standard library, native platform, installed dependency, one clear line, minimum new code. Do not simplify away validation, error handling, security, accessibility, or requested behavior. If an intentional simplification has a known ceiling, mark it with `star-defer:` and name the revisit trigger.
+
 ## Cursor Rule
 
 Use Cursor context as entry evidence. Open files, selected text, linter diagnostics, and terminal state can point to the problem, but the owning module and tests define the real boundary. Respect user rules, workspace rules, project rules, and mode-specific instructions when they are more specific than this rule.

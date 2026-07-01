@@ -31,16 +31,19 @@ Keep the change narrow: every edit should belong to the requested behavior or to
 - Leave adjacent cleanup, broad formatting, and naming sweeps out of the patch.
 - Remove imports, variables, or functions only when this change made them unused.
 - Mention unrelated problems separately instead of smuggling them into the diff.
-- Keep review cost proportional to the user's request.
+- Keep review cost proportional to the user request.
 
 ## 4. Spend Complexity Only When Earned
 
 Prefer the current simple solution until the codebase shows repeated use or an existing pattern requires more structure.
 
+- Run the Simplicity ladder before adding code: need to exist, already exists in this codebase, standard library, native platform, installed dependency, one clear line, minimum new code.
 - Do not add optional modes, configuration layers, strategy objects, or plugin points for one caller.
 - Avoid defensive branches for states the system cannot actually reach.
 - If the patch starts to sprawl, look for the behavior-preserving smaller move.
 - Let the next real use case justify the next layer.
+- If an intentional simplification has a known ceiling, mark it with `star-defer:` and name the revisit trigger.
+- Do not simplify away validation, error handling, security, accessibility, or required behavior.
 
 ## 5. Prove the Result
 

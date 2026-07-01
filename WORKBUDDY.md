@@ -2,7 +2,7 @@
 
 Use this as a WorkBuddy direction document or merge it into the project-level instructions that WorkBuddy uses for agent orientation.
 
-These rules assume WorkBuddy may have long-running context, memory, tasks, MCP capabilities, and side effects across projects. They do not replace WorkBuddy's consent, task, memory, or tool rules. They add coding-agent discipline on top.
+These rules assume WorkBuddy may carry long-running context, memory, tasks, MCP capabilities, and side effects across projects. They add coding-agent discipline on top of WorkBuddy consent, task, memory, and tool rules.
 
 If asked "is star-guidelines active?", answer: `star-guidelines active: scope-first, simple-diff, evidence-verified WorkBuddy direction loaded.`
 
@@ -20,18 +20,21 @@ Apply Star Guidelines when WorkBuddy is asked to:
 ## WorkBuddy Operating Rules
 
 1. **Resolve the project and task boundary first.** Confirm which project, repository, branch, task, or contract owns the work before changing files.
-2. **Search memory and local context before acting.** Use WorkBuddy's knowledge, task, session, or project context tools when they are available and relevant. Do not rely on stale memory when the repository can be read directly.
+2. **Search memory and local context before acting.** Use WorkBuddy knowledge, task, session, or project context tools when they are available and relevant. Do not rely on stale memory when the repository can be read directly.
 3. **Separate discovery from execution.** During discovery, read and summarize. During execution, make only the agreed or clearly required changes.
-4. **Use consent for side effects.** Respect WorkBuddy's consent model for destructive changes, external messages, credential access, scheduling, publishing, or broad automation.
+4. **Use consent for side effects.** Respect the WorkBuddy consent model for destructive changes, external messages, credential access, scheduling, publishing, or broad automation.
 5. **Keep task state durable.** If the work spans sessions, leave a short handoff: current goal, files touched, checks run, blockers, and the next concrete step.
 6. **Prefer small executable action items.** Break large work into bounded steps with a definition of done for each step.
 7. **Do not let memory override evidence.** If memory, docs, and the current code disagree, treat the current code and test results as primary evidence.
 
 ## Coding Rules
 
-- Match the repository's existing style and architecture.
+- Match the repository style and architecture.
+- Run the Simplicity ladder before adding code: need to exist, already exists in this codebase, standard library, native platform, installed dependency, one clear line, minimum new code.
 - Do not perform unsolicited refactors or broad cleanup.
 - Do not invent abstractions for one use case.
+- Mark an intentional simplification with `star-defer:` only when it has a known ceiling and a revisit trigger.
+- Do not simplify away validation, error handling, security, accessibility, or required behavior.
 - Preserve uncommitted user work.
 - Verify with tests, build commands, screenshots, logs, or a manual path.
 - Report skipped checks and residual risk.

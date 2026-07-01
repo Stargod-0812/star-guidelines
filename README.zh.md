@@ -54,6 +54,12 @@
 
 > 契约强度随风险线性上升。typo fix 保持极轻量；跨模块重构必须有 plan + evidence + risk report。
 
+### Simplicity Ladder
+
+Rule 4 现在有明确的简化阶梯。新增代码前，agent 先判断这件事是否需要存在，再找它是否 already exists in this codebase，然后依次优先 standard library、native platform、installed dependency、一个清晰单行，最后才写最小新代码。
+
+这条阶梯不能删掉校验、错误处理、安全、可访问性或用户明确要求的行为。刻意简化如果有 known ceiling，就用 `star-defer:` 标记，并写清 revisit trigger。
+
 ---
 
 ## 执行循环
@@ -102,7 +108,7 @@ Star Guidelines 的核心设计决策：**每个 IDE 用自己的原生格式加
 | Codex / AGENTS IDE | `AGENTS.md` | `skills/star-guidelines/SKILL.md` | `star-guidelines active: scope-first, simple-diff, evidence-verified agent rules loaded from AGENTS.md.` |
 | Codex skill runner | `skills/star-guidelines/SKILL.md` | `agents/openai.yaml` | `star-guidelines active: scope-first, simple-diff, evidence-verified reusable skill loaded.` |
 | Claude Code 项目 | `CLAUDE.md` | — | `star-guidelines active: scope-first, simple-diff, evidence-verified Claude project rules loaded.` |
-| Claude plugin 环境 | `.claude-plugin/` | — | `star-guidelines active: scope-first, simple-diff, evidence-verified bundled skill loaded.` |
+| Claude plugin 环境 | `.claude-plugin/` | `star-trim-review` | `star-guidelines active: scope-first, simple-diff, evidence-verified bundled skill loaded.` |
 | WorkBuddy 长任务 | `WORKBUDDY.md` | project task context | `star-guidelines active: scope-first, simple-diff, evidence-verified WorkBuddy direction loaded.` |
 
 > **关键原则**：不要把所有适配器装进同一个项目。每个文件针对特定 loader 设计。已有规则的项目，把对应适配器**合并**进现有规则文件。
@@ -185,6 +191,17 @@ curl -fsSL "$STAR_RAW/WORKBUDDY.md" -o WORKBUDDY.star-guidelines.md
 
 合并进 WorkBuddy 项目级 direction 区域。适用于长流程、跨会话交接、MCP 密集任务。
 
+### 可选 Trim Review Skill
+
+当你只想审“哪些能删、哪些能复用、哪些能更短”时，安装 `star-trim-review`：
+
+```bash
+STAR_RAW=https://raw.githubusercontent.com/Stargod-0812/star-guidelines/main
+mkdir -p ~/.codex/skills/star-trim-review
+curl -fsSL "$STAR_RAW/skills/star-trim-review/SKILL.md" \
+  -o ~/.codex/skills/star-trim-review/SKILL.md
+```
+
 ---
 
 ## 验证握手
@@ -203,6 +220,21 @@ is star-guidelines active?
 | WorkBuddy | `WorkBuddy direction loaded` |
 
 **诊断**：如果响应里提到了错误的适配器（比如在 Cursor 里说"Claude project rules"），说明存在规则冲突。删掉不属于当前 IDE 的规则文件即可。
+
+---
+
+## 推荐下一步：项目上下文
+
+Star Guidelines 要求 agent 先阅读再设计。一个短的项目 `CONTEXT.md` 可以作为你指给 agent 阅读的稳定入口，让它在编辑前理解本地产品语言。
+
+使用模板：
+
+```bash
+STAR_RAW=https://raw.githubusercontent.com/Stargod-0812/star-guidelines/main
+curl -fsSL "$STAR_RAW/templates/CONTEXT.md" -o CONTEXT.md
+```
+
+只填写稳定事实：领域术语、agent 容易混淆的概念、所有权边界、已确定决策、最小有用验证命令。不要把临时计划、TODO、密钥、凭据或实现猜测放进去。
 
 ---
 
@@ -328,14 +360,16 @@ star-guidelines/
 ├── WORKBUDDY.md                       # WorkBuddy adapter · 长流程 direction
 ├── .cursor/
 │   ├── rules/star-guidelines.mdc      # Cursor always-on rule（alwaysApply: true）
-│   └── skills/star-guidelines/SKILL.md # Cursor project skill
+│   └── skills/                        # Cursor project skills
 ├── skills/star-guidelines/
 │   ├── SKILL.md                       # IDE-agnostic reusable skill
 │   └── agents/openai.yaml            # OpenAI skill runner metadata
+├── skills/star-trim-review/
+│   └── SKILL.md                       # 只审复杂度的 review skill
 ├── .claude-plugin/
 │   ├── plugin.json                    # Claude plugin manifest
 │   ├── marketplace.json               # Marketplace metadata
-│   └── skills/star-guidelines/SKILL.md # Bundled skill copy
+│   └── skills/                        # Bundled skill copies
 ├── .github/
 │   ├── workflows/check-repo.yml       # CI：仓库一致性检查
 │   ├── ISSUE_TEMPLATE/                # Bug / proposal issue 模板
@@ -344,7 +378,9 @@ star-guidelines/
 ├── docs/
 │   ├── ADAPTERS.md                    # 适配器详细指南
 │   └── INSTALL.md                     # 分平台安装文档
-├── EXAMPLES.md                        # 7 个 before/after 场景
+├── templates/
+│   └── CONTEXT.md                     # 可选项目语言模板
+├── EXAMPLES.md                        # Before/after 场景
 ├── CHANGELOG.md                       # 版本变更记录
 ├── LICENSE                            # 源码可读，需经授权
 └── scripts/
@@ -369,7 +405,7 @@ star-guidelines/
 
 ## 维护与一致性保证
 
-修改核心契约时，**同一次 commit** 同步全部 8 个适配器文件：
+修改核心契约时，**同一次 commit** 同步全部适配器文件：
 
 ```text
 core/CONTRACT.md                       ← 改这里
@@ -379,6 +415,7 @@ CLAUDE.md                              ← 同步
 .cursor/skills/star-guidelines/SKILL.md ← 同步
 WORKBUDDY.md                           ← 同步
 skills/star-guidelines/SKILL.md        ← 同步
+skills/star-trim-review/SKILL.md       ← 同步
 .claude-plugin/skills/…/SKILL.md       ← 同步
 ```
 
@@ -395,6 +432,9 @@ scripts/check-repo.sh
 - 中文 README 包含所有中文核心术语
 - 本地 Markdown 链接可解析
 - Plugin JSON 和 OpenAI skill metadata 可解析
+- `templates/CONTEXT.md` 存在并包含预期项目上下文章节
+- Simplicity ladder 和 `star-defer:` 术语在各 adapter 中保持存在
+- `star-trim-review` 存在于 reusable、Cursor 和 bundled skill surface
 - GitHub Actions 会在 push 和 pull request 上运行同一检查
 - 可选发布检查：设置 `STAR_GUIDELINES_EXPECTED_IDENTITY` 检查 Git author/committer 身份一致性，设置 `STAR_GUIDELINES_CHECK_REMOTE_MAIN=1` 要求 `origin/main` 与 HEAD 对齐
 

@@ -14,6 +14,20 @@ If asked "is star-guidelines active?", answer: `star-guidelines active: scope-fi
 6. **Verify with concrete evidence.** Run the smallest useful test, build, lint, screenshot, log check, or manual reproduction. Report what passed and what could not be run.
 7. **Explain tradeoffs briefly.** Name meaningful risks, simpler alternatives, and unresolved questions. Do not turn routine work into ceremony.
 
+## Simplicity Ladder
+
+Before adding new code, run the Simplicity ladder:
+
+1. Does this need to exist?
+2. Reuse what already exists in this codebase.
+3. Prefer the standard library when it solves the request.
+4. Choose a native platform feature when it solves the request.
+5. Keep to an installed dependency when it solves the request.
+6. Collapse to one clear line when it solves the request.
+7. Otherwise write the minimum code that works and verify it.
+
+Do not simplify away validation, error handling, security, accessibility, or explicitly requested behavior. If an intentional simplification has a known ceiling, mark it with `star-defer:` and name the revisit trigger.
+
 ## Planning Rule
 
 For work beyond obvious one-line edits, use a short plan with verification attached to each step:

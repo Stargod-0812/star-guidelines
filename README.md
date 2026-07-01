@@ -54,6 +54,14 @@ Source of truth: [`core/CONTRACT.md`](./core/CONTRACT.md). Every adapter is a pr
 
 > Contract intensity scales linearly with risk. A typo fix stays ultra-light; a cross-module refactor requires plan + evidence + risk report.
 
+### Simplicity Ladder
+
+Rule 4 now has an explicit decision ladder. Before adding code, the agent checks whether the work needs to exist or already exists in this codebase.
+
+It then prefers the standard library, a native platform feature, an installed dependency, or one clear line. Only then does it write the minimum new code.
+
+The ladder does not cut validation, error handling, security, accessibility, or explicitly requested behavior. When a deliberate simplification has a known ceiling, mark it with `star-defer:` and name the revisit trigger.
+
 ---
 
 ## Execution loop
@@ -102,7 +110,7 @@ Core design decision: **each IDE loads rules through its own native format, not 
 | Codex / AGENTS IDE | `AGENTS.md` | `skills/star-guidelines/SKILL.md` | `star-guidelines active: scope-first, simple-diff, evidence-verified agent rules loaded from AGENTS.md.` |
 | Codex skill runner | `skills/star-guidelines/SKILL.md` | `agents/openai.yaml` | `star-guidelines active: scope-first, simple-diff, evidence-verified reusable skill loaded.` |
 | Claude Code project | `CLAUDE.md` | — | `star-guidelines active: scope-first, simple-diff, evidence-verified Claude project rules loaded.` |
-| Claude plugin setup | `.claude-plugin/` | — | `star-guidelines active: scope-first, simple-diff, evidence-verified bundled skill loaded.` |
+| Claude plugin setup | `.claude-plugin/` | `star-trim-review` | `star-guidelines active: scope-first, simple-diff, evidence-verified bundled skill loaded.` |
 | WorkBuddy long task | `WORKBUDDY.md` | project task context | `star-guidelines active: scope-first, simple-diff, evidence-verified WorkBuddy direction loaded.` |
 
 > **Key principle**: Do not install every adapter into one project. Each file targets a specific loader. If the project already has rules, **merge** the matching adapter into the existing rule surface.
@@ -185,6 +193,17 @@ curl -fsSL "$STAR_RAW/WORKBUDDY.md" -o WORKBUDDY.star-guidelines.md
 
 Merge into your WorkBuddy project-level direction area. Suited for long-running tasks, cross-session handoffs, and MCP-heavy workflows.
 
+### Optional Trim Review Skill
+
+Use `star-trim-review` when you want a pass that only asks what can be deleted, replaced with existing behavior, or expressed with fewer lines.
+
+```bash
+STAR_RAW=https://raw.githubusercontent.com/Stargod-0812/star-guidelines/main
+mkdir -p ~/.codex/skills/star-trim-review
+curl -fsSL "$STAR_RAW/skills/star-trim-review/SKILL.md" \
+  -o ~/.codex/skills/star-trim-review/SKILL.md
+```
+
 ---
 
 ## Verification handshake
@@ -203,6 +222,21 @@ is star-guidelines active?
 | WorkBuddy | `WorkBuddy direction loaded` |
 
 **Diagnosis**: If the response mentions the wrong adapter (e.g., "Claude project rules" inside Cursor), a rule conflict exists. Remove the file that doesn't belong to the current IDE.
+
+---
+
+## Recommended next step: project context
+
+Star Guidelines tells the agent to read before designing. A short project `CONTEXT.md` gives you a stable file to point the agent at when it needs the local product language before editing.
+
+Use the template:
+
+```bash
+STAR_RAW=https://raw.githubusercontent.com/Stargod-0812/star-guidelines/main
+curl -fsSL "$STAR_RAW/templates/CONTEXT.md" -o CONTEXT.md
+```
+
+Fill in only durable facts: domain terms, concepts agents often confuse, ownership boundaries, existing decisions, and the smallest useful verification commands. Do not use it for transient plans, TODOs, secrets, or implementation guesses.
 
 ---
 
@@ -328,14 +362,16 @@ star-guidelines/
 ├── WORKBUDDY.md                       # WorkBuddy adapter · long-running direction
 ├── .cursor/
 │   ├── rules/star-guidelines.mdc      # Cursor always-on rule (alwaysApply: true)
-│   └── skills/star-guidelines/SKILL.md # Cursor project skill
+│   └── skills/                        # Cursor project skills
 ├── skills/star-guidelines/
 │   ├── SKILL.md                       # IDE-agnostic reusable skill
 │   └── agents/openai.yaml            # OpenAI skill runner metadata
+├── skills/star-trim-review/
+│   └── SKILL.md                       # Complexity-only review skill
 ├── .claude-plugin/
 │   ├── plugin.json                    # Claude plugin manifest
 │   ├── marketplace.json               # Marketplace metadata
-│   └── skills/star-guidelines/SKILL.md # Bundled skill copy
+│   └── skills/                        # Bundled skill copies
 ├── .github/
 │   ├── workflows/check-repo.yml       # CI: repository consistency check
 │   ├── ISSUE_TEMPLATE/                # Bug/proposal issue templates
@@ -344,7 +380,9 @@ star-guidelines/
 ├── docs/
 │   ├── ADAPTERS.md                    # Adapter deep-dive
 │   └── INSTALL.md                     # Per-platform install docs
-├── EXAMPLES.md                        # 7 before/after scenarios
+├── templates/
+│   └── CONTEXT.md                     # Optional project-language template
+├── EXAMPLES.md                        # Before/after scenarios
 ├── CHANGELOG.md                       # Versioned changes
 ├── LICENSE                            # Source-available, permission-required
 └── scripts/
@@ -369,7 +407,7 @@ star-guidelines/
 
 ## Maintenance & consistency
 
-When changing the core contract, **sync all 8 adapter files in the same commit**:
+When changing the core contract, **sync all adapter files in the same commit**:
 
 ```text
 core/CONTRACT.md                       ← change here
@@ -379,6 +417,7 @@ CLAUDE.md                              ← sync
 .cursor/skills/star-guidelines/SKILL.md ← sync
 WORKBUDDY.md                           ← sync
 skills/star-guidelines/SKILL.md        ← sync
+skills/star-trim-review/SKILL.md       ← sync
 .claude-plugin/skills/…/SKILL.md       ← sync
 ```
 
@@ -395,6 +434,9 @@ The script verifies:
 - Chinese README contains all Chinese core terms
 - Local Markdown links resolve
 - Plugin JSON and OpenAI skill metadata parse
+- `templates/CONTEXT.md` is present with the expected project-context sections
+- Simplicity ladder and `star-defer:` terms stay present across adapters
+- `star-trim-review` is present in reusable, Cursor, and bundled skill surfaces
 - GitHub Actions runs the same check on pushes and pull requests
 - Optional release checks: set `STAR_GUIDELINES_EXPECTED_IDENTITY` for Git author/committer identity consistency and `STAR_GUIDELINES_CHECK_REMOTE_MAIN=1` to require `origin/main` alignment
 

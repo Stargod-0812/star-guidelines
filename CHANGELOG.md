@@ -7,9 +7,13 @@ All notable changes to Star Guidelines are documented here. This project follows
 ### Added
 - GitHub Actions workflow that runs `scripts/check-repo.sh` on pushes and pull requests.
 - Explicit activation handshake text for Claude Code, WorkBuddy, Cursor skill, reusable skill, and bundled plugin skill.
+- `templates/CONTEXT.md` as an optional next step for documenting project language, boundaries, decisions, and verification commands.
+- Simplicity ladder guidance for choosing reuse, standard library, native platform features, installed dependencies, one-line solutions, and minimum new code.
+- `star-trim-review` skill for reviewing avoidable complexity without mixing in correctness or security review.
 
 ### Changed
 - `scripts/check-repo.sh` now checks all adapter files for all seven core terms, validates handshake text, scans local Markdown links, and parses plugin metadata.
+- `scripts/check-repo.sh` now verifies Simplicity ladder terms, `star-defer:` marker guidance, and `star-trim-review` skill surfaces.
 - Git author/committer identity and `origin/main` alignment checks are now opt-in release checks through environment variables; the remote alignment check fails if `origin/main` is missing.
 - License now explicitly allows documented private or internal installation copies while preserving permission requirements for redistribution and productization.
 - Install docs now call out that public redistribution, marketplace bundling, or committing copied adapters into public projects requires permission.

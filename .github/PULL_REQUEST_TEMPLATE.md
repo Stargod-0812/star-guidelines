@@ -15,9 +15,12 @@
 - [ ] `CLAUDE.md`
 - [ ] `.cursor/rules/star-guidelines.mdc`
 - [ ] `.cursor/skills/star-guidelines/SKILL.md`
+- [ ] `.cursor/skills/star-trim-review/SKILL.md`
 - [ ] `WORKBUDDY.md`
 - [ ] `skills/star-guidelines/SKILL.md`
+- [ ] `skills/star-trim-review/SKILL.md`
 - [ ] `.claude-plugin/skills/star-guidelines/SKILL.md`
+- [ ] `.claude-plugin/skills/star-trim-review/SKILL.md`
 
 ## Verification
 

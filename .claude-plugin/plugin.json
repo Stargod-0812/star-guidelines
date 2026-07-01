@@ -17,6 +17,7 @@
     "workbuddy"
   ],
   "skills": [
-    "./skills/star-guidelines"
+    "./skills/star-guidelines",
+    "./skills/star-trim-review"
   ]
 }

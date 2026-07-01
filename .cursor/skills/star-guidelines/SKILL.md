@@ -21,6 +21,20 @@ The contract labels are: Clarify before editing, Read before designing, Keep the
 6. **Check behavior.** Run the smallest useful test, build, lint, screenshot, browser path, log check, or manual reproduction.
 7. **Report evidence.** Summarize changed files, what passed, what was skipped, and remaining risk.
 
+## Simplicity Ladder
+
+Before adding new code, run the Simplicity ladder:
+
+1. Does this need to exist?
+2. Reuse what already exists in this codebase.
+3. Prefer the standard library when it solves the request.
+4. Choose a native platform feature when it solves the request.
+5. Keep to an installed dependency when it solves the request.
+6. Collapse to one clear line when it solves the request.
+7. Otherwise write the minimum code that works and verify it.
+
+Do not simplify away validation, error handling, security, accessibility, or requested behavior. If an intentional simplification has a known ceiling, mark it with `star-defer:` and name the revisit trigger.
+
 ## Diff Test
 
 Every changed line should implement the request, keep the patch passing, remove something made unused by this patch, or document behavior introduced here. If not, leave it out.

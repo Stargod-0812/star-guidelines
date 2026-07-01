@@ -12,10 +12,13 @@ required_files=(
   "WORKBUDDY.md"
   ".cursor/rules/star-guidelines.mdc"
   ".cursor/skills/star-guidelines/SKILL.md"
+  ".cursor/skills/star-trim-review/SKILL.md"
   "skills/star-guidelines/SKILL.md"
+  "skills/star-trim-review/SKILL.md"
   ".claude-plugin/plugin.json"
   ".claude-plugin/marketplace.json"
   ".claude-plugin/skills/star-guidelines/SKILL.md"
+  ".claude-plugin/skills/star-trim-review/SKILL.md"
   "core/CONTRACT.md"
   "docs/ADAPTERS.md"
   "docs/INSTALL.md"
@@ -24,6 +27,7 @@ required_files=(
   "LICENSE"
   "skills/star-guidelines/agents/openai.yaml"
   ".github/workflows/check-repo.yml"
+  "templates/CONTEXT.md"
 )
 
 for file in "${required_files[@]}"; do
@@ -76,6 +80,28 @@ for term in "${required_terms[@]}"; do
   done
 done
 
+required_simplicity_terms=(
+  "Simplicity ladder"
+  "already exists in this codebase"
+  "standard library"
+  "native platform"
+  "installed dependency"
+)
+
+for term in "${required_simplicity_terms[@]}"; do
+  if ! file_contains "core/CONTRACT.md" "$term"; then
+    echo "Core contract is missing simplicity term: $term" >&2
+    exit 1
+  fi
+
+  for file in "${adapter_files[@]}"; do
+    if ! file_contains "$file" "$term"; then
+      echo "Adapter $file is missing simplicity term: $term" >&2
+      exit 1
+    fi
+  done
+done
+
 required_zh_terms=(
   "先澄清"
   "先阅读"
@@ -87,6 +113,44 @@ required_zh_terms=(
 for term in "${required_zh_terms[@]}"; do
   if ! file_contains "README.zh.md" "$term"; then
     echo "Chinese README is missing core term: $term" >&2
+    exit 1
+  fi
+done
+
+required_defer_terms=(
+  "star-defer:"
+  "known ceiling"
+  "revisit trigger"
+)
+
+for term in "${required_defer_terms[@]}"; do
+  if ! file_contains "core/CONTRACT.md" "$term"; then
+    echo "Core contract is missing defer term: $term" >&2
+    exit 1
+  fi
+
+  for file in "${adapter_files[@]}"; do
+    if ! file_contains "$file" "$term"; then
+      echo "Adapter $file is missing defer term: $term" >&2
+      exit 1
+    fi
+  done
+done
+
+required_context_terms=(
+  "Project Context"
+  "Domain Terms"
+  "Do Not Confuse"
+  "Ownership Boundaries"
+  "Existing Decisions"
+  "Verification Commands"
+  "Common Agent Pitfalls"
+  "Update Rules"
+)
+
+for term in "${required_context_terms[@]}"; do
+  if ! file_contains "templates/CONTEXT.md" "$term"; then
+    echo "Context template is missing required section: $term" >&2
     exit 1
   fi
 done
@@ -170,6 +234,23 @@ if missing_links:
 
 for json_file in [".claude-plugin/plugin.json", ".claude-plugin/marketplace.json"]:
     json.loads(Path(json_file).read_text(encoding="utf-8"))
+
+plugin_json = json.loads(Path(".claude-plugin/plugin.json").read_text(encoding="utf-8"))
+for skill_path in ["./skills/star-guidelines", "./skills/star-trim-review"]:
+    if skill_path not in plugin_json.get("skills", []):
+        print(f"Plugin manifest missing skill path: {skill_path}", file=sys.stderr)
+        sys.exit(1)
+
+for trim_skill_file in [
+    "skills/star-trim-review/SKILL.md",
+    ".cursor/skills/star-trim-review/SKILL.md",
+    ".claude-plugin/skills/star-trim-review/SKILL.md",
+]:
+    trim_skill = Path(trim_skill_file).read_text(encoding="utf-8")
+    for term in ["delete:", "stdlib:", "native:", "yagni:", "shrink:", "net:"]:
+        if term not in trim_skill:
+            print(f"{trim_skill_file} missing review term: {term}", file=sys.stderr)
+            sys.exit(1)
 
 openai_yaml = Path("skills/star-guidelines/agents/openai.yaml").read_text(encoding="utf-8")
 for term in ["display_name:", "short_description:", "default_prompt:"]:

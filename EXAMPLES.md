@@ -162,3 +162,27 @@ I will use the selection as the entry point, then read the owning component, its
 ```
 
 Why it is better: editor context is a clue, not the full behavior boundary.
+
+## 8. Trim Review
+
+User request:
+
+```text
+Review this date picker PR for over-engineering.
+```
+
+Weak review:
+
+```text
+The component looks flexible and well structured.
+```
+
+Better review:
+
+```text
+src/DatePicker.tsx:1: native: custom calendar component. Use <input type="date"> unless product requirements exceed native browser behavior.
+src/useDateParsing.ts:1: stdlib: custom parser for ISO date strings. Date.parse covers this input shape.
+net: -180 lines possible, -1 dependencies possible.
+```
+
+Why it is better: the review asks whether the code needs to exist before judging whether it is well structured.

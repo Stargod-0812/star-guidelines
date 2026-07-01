@@ -56,3 +56,33 @@ is star-guidelines active?
 ```
 
 The response should mention `WorkBuddy direction loaded`. If your WorkBuddy setup has no fixed project direction path, treat the merge location as environment-specific and keep the `WORKBUDDY.md` heading and handshake text intact.
+
+## Optional Project Context
+
+After the adapter is installed and the handshake works, add a project context file if the repository has domain language that agents need to understand:
+
+```bash
+STAR_RAW=https://raw.githubusercontent.com/Stargod-0812/star-guidelines/main
+curl -fsSL "$STAR_RAW/templates/CONTEXT.md" -o CONTEXT.md
+```
+
+If you are working from a local clone of this repository, copying also works:
+
+```bash
+cp templates/CONTEXT.md CONTEXT.md
+```
+
+Keep `CONTEXT.md` short and durable. It should define domain terms, confusing concept pairs, ownership boundaries, existing decisions, and verification commands. It should not contain transient plans, TODOs, secrets, credentials, or implementation guesses.
+
+## Optional Trim Review Skill
+
+Install `star-trim-review` when you want a focused pass for avoidable complexity:
+
+```bash
+STAR_RAW=https://raw.githubusercontent.com/Stargod-0812/star-guidelines/main
+mkdir -p ~/.codex/skills/star-trim-review
+curl -fsSL "$STAR_RAW/skills/star-trim-review/SKILL.md" \
+  -o ~/.codex/skills/star-trim-review/SKILL.md
+```
+
+For Cursor project skills, copy `.cursor/skills/star-trim-review/SKILL.md` beside the main project skill. For Claude plugin installs, the bundled plugin manifest includes both skills.
